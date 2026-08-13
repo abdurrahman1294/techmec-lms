@@ -1,0 +1,89 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px;
+  background: #1e40af;
+  color: white;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.nav-links a,
+.nav-user a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nav-links a.active,
+.nav-user a.active {
+  border-bottom: 2px solid white;
+}
+
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.user-name {
+  font-weight: 600;
+}
+
+.role-badge {
+  font-size: 12px;
+  background: white;
+  color: #1e40af;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-top: 2px;
+}
+
+.logout-btn {
+  border: none;
+  background: #dc2626;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background: #b91c1c;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .nav-links,
+  .nav-user {
+    justify-content: center;
+  }
+
+  .user-info {
+    align-items: center;
+  }
+}

@@ -1,0 +1,109 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  name         String?
+  email        String        @unique
+  passwordHash String
+  role         Role          @default(STUDENT)
+  status       UserStatus    @default(ACTIVE)
+  createdAt    DateTime      @default(now())
+  CartItem     CartItem[]
+  courses      Course[]      @relation("InstructorCourses")
+  enrollments  Enrollment[]
+  SystemLog    SystemLog[]
+  Transaction  Transaction[]
+}
+
+model Course {
+  id                 Int           @id @default(autoincrement())
+  title              String
+  description        String
+  category           String        @default("General")
+  price              Float         @default(0.0)
+  thumbnailUrl       String?
+  learningObjectives String[]
+  isPublished        Boolean       @default(false)
+  instructorId       Int
+  createdAt          DateTime      @default(now())
+  CartItem           CartItem[]
+  instructor         User          @relation("InstructorCourses", fields: [instructorId], references: [id])
+  enrollments        Enrollment[]
+  lessons            Lesson[]
+  Transaction        Transaction[]
+}
+
+model Lesson {
+  id        Int      @id @default(autoincrement())
+  courseId  Int
+  title     String
+  content   String
+  sortOrder Int
+  createdAt DateTime @default(now())
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+}
+
+model Enrollment {
+  id               Int      @id @default(autoincrement())
+  studentId        Int
+  courseId         Int
+  progressPercent  Int      @default(0)
+  completedLessons Int[]
+  status           String   @default("ACTIVE")
+  enrolledAt       DateTime @default(now())
+  course           Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  student          User     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, courseId])
+}
+
+model CartItem {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  courseId  Int
+  createdAt DateTime @default(now())
+  Course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+}
+
+model SystemLog {
+  id        Int      @id @default(autoincrement())
+  userId    Int?
+  action    String
+  details   String?
+  ipAddress String?
+  createdAt DateTime @default(now())
+  User      User?    @relation(fields: [userId], references: [id])
+}
+
+model Transaction {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  courseId  Int
+  amount    Float
+  status    String   @default("COMPLETED")
+  createdAt DateTime @default(now())
+  Course    Course   @relation(fields: [courseId], references: [id])
+  User      User     @relation(fields: [userId], references: [id])
+}
+
+enum Role {
+  ADMINISTRATOR
+  INSTRUCTOR
+  STUDENT
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+}

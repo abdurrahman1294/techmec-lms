@@ -1,0 +1,23 @@
+.course-form {
+  background: white;
+  padding: 25px;
+
+  border-radius: 10px;
+
+  box-shadow: 0 2px 10px rgba(0,0,0,.08);
+
+  margin-bottom: 25px;
+}
+
+.course-form h2 {
+  margin-bottom: 20px;
+}
+
+.course-form button {
+  background: #16a34a;
+  color: white;
+}
+
+.course-form button:hover {
+  background: #15803d;
+}

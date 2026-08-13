@@ -1,0 +1,107 @@
+.course-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transition: all 0.25s ease;
+  border: 1px solid #e5e7eb;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+.course-header h3 {
+  color: #1e3a8a;
+  margin: 0 0 16px;
+  font-size: 1.4rem;
+}
+
+.course-description {
+  color: #475569;
+  line-height: 1.7;
+  margin-bottom: 18px;
+}
+
+.course-instructor,
+.course-price {
+  color: #334155;
+  margin-bottom: 10px;
+}
+
+.course-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.course-actions button {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.course-actions button:hover {
+  transform: translateY(-2px);
+}
+
+/* View */
+
+.view-btn {
+  background: #2563eb;
+  color: white;
+}
+
+.view-btn:hover {
+  background: #1d4ed8;
+}
+
+/* Enroll */
+
+.enroll-btn {
+  background: #16a34a;
+  color: white;
+}
+
+.enroll-btn:hover {
+  background: #15803d;
+}
+
+/* Edit */
+
+.edit-btn {
+  background: #f59e0b;
+  color: white;
+}
+
+.edit-btn:hover {
+  background: #d97706;
+}
+
+/* Delete */
+
+.delete-btn {
+  background: #dc2626;
+  color: white;
+}
+
+.delete-btn:hover {
+  background: #b91c1c;
+}
+
+@media (max-width: 600px) {
+  .course-actions {
+    flex-direction: column;
+  }
+
+  .course-actions button {
+    width: 100%;
+  }
+}
