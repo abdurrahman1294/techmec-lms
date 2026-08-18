@@ -18,11 +18,10 @@ interface AuthContextType {
   login: (token: string, user: User) => void;
   logout: () => void;
   isAuthenticated: boolean;
+  loading: boolean;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(
-  undefined
-);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({
   children,
@@ -31,6 +30,7 @@ export const AuthProvider = ({
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     try {
@@ -48,19 +48,18 @@ export const AuthProvider = ({
       }
     } catch (error) {
       console.error("Invalid auth data found in localStorage.");
-
       localStorage.removeItem("user");
       localStorage.removeItem("token");
-
       setUser(null);
       setToken(null);
+    } finally {
+      setLoading(false);
     }
   }, []);
 
   const login = (token: string, user: User) => {
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(user));
-
     setToken(token);
     setUser(user);
   };
@@ -68,7 +67,6 @@ export const AuthProvider = ({
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-
     setToken(null);
     setUser(null);
   };
@@ -81,6 +79,7 @@ export const AuthProvider = ({
         login,
         logout,
         isAuthenticated: !!user && !!token,
+        loading,
       }}
     >
       {children}
@@ -92,9 +91,7 @@ export const useAuth = () => {
   const context = useContext(AuthContext);
 
   if (!context) {
-    throw new Error(
-      "useAuth must be used within AuthProvider"
-    );
+    throw new Error("useAuth must be used within AuthProvider");
   }
 
   return context;
