@@ -44,15 +44,9 @@ npm run dev            # http://localhost:5173
 
 | Role | Email | Password |
 | --- | --- | --- |
-| Admin | admin@mechspec.local | Admin@12345
-
- |
-| Instructor | instructor@mechspec.local | Instruct@12345
-
- |
-| Student | student@mechspec.local | Student@mech1234
-
- |
+| Admin | admin@mechspec.local | Admin@12345|
+| Instructor | instructor@mechspec.local | Instruct@12345|
+| Student | student@mechspec.local | Student@mech1234|
 
 ## Architecture
 
