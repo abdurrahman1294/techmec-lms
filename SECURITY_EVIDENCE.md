@@ -3,7 +3,7 @@
 ### 1. Database & ORM Connection Verification
 * **Description:** The application successfully connects to the PostgreSQL database via Prisma ORM and pgAdmin. This verifies that database schemas, tables, and data storage are functioning correctly.
 * **Evidence:**
-  ![Database Records Verification](./screenshots/Screenshot-pg-admin-database.png)
+  ![Database Records Verification](./screenshots/Screenshot -pg-admin-database.png)
   *Figure 1: pgAdmin interface displaying successfully queried database tables and records.*
 
 ---
