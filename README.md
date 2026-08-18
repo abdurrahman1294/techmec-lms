@@ -1,6 +1,6 @@
 # Mech Spec Technologies LMS (MVP)
 
-Role-based Learning Management System for Mech Spec Technologies[cite: 1].
+Role based Learning Management System for Mech Spec Technologies.
 
 Live Demo: https://techmec-lms.vercel.app  
 GitHub Repository: https://github.com/abdurrahman1294/techmec-lms
@@ -41,6 +41,8 @@ npm run dev            # http://localhost:5173
 ```
 
 ## Demo Accounts (After Seed)
+
+(Note: Passwords have been updated from default seed values following security alerts regarding pre-configured credentials.)
 
 | Role | Email | Password |
 | --- | --- | --- |
