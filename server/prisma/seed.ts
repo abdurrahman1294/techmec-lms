@@ -1,12 +1,3 @@
-/**
- * Showcase seed: Admin + sample Instructor + sample Student + one published course.
- * Run: npm run seed
- *
- * Defaults (override with env):
- *   admin@mechspec.local / Admin@12345
- *   instructor@mechspec.local / Instruct@12345
- *   student@mechspec.local / Student@12345
- */
 import "dotenv/config";
 import bcrypt from "bcrypt";
 import { PrismaClient } from "../generated/prisma/client";
@@ -28,127 +19,81 @@ async function upsertUser(
   const user = await prisma.user.create({
     data: { name, email, passwordHash, role, status: "ACTIVE" },
   });
-  console.log(`Created: ${email} / (see seed defaults) id=${user.id}`);
+  console.log(`Created: ${email} id=${user.id}`);
   return user;
 }
 
 async function main() {
   const admin = await upsertUser(
-    process.env.SEED_ADMIN_EMAIL || "admin@mechspec.local",
-    process.env.SEED_ADMIN_NAME || "System Administrator",
-    process.env.SEED_ADMIN_PASSWORD || "Admin@12345",
+    "admin@mechspec.local",
+    "System Administrator",
+    "Admin@12345",
     "ADMINISTRATOR"
   );
 
   const instructor = await upsertUser(
     "instructor@mechspec.local",
-    "Demo Instructor",
+    "John Instructor",
     "Instruct@12345",
     "INSTRUCTOR"
   );
 
   const student = await upsertUser(
     "student@mechspec.local",
-    "Demo Student",
-    "Student@12345",
+    "Alice Student",
+    "Student@2026Safe!",          //  strongr password
     "STUDENT"
   );
 
-  const existingCourse = await prisma.course.findFirst({
-    where: {
+  //  COURSES 
+  const course1 = await prisma.course.upsert({
+    where: { id: 1 },
+    update: {},
+    create: {
       title: "Introduction to Mechanical Design",
+      description: "Learn the fundamentals of mechanical design, CAD basics, and engineering drawing standards.",
+      category: "Mechanical Engineering",
+      price: 49.99,
+      isPublished: true,
       instructorId: instructor.id,
+      thumbnailUrl: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800",
     },
   });
 
-  if (!existingCourse) {
-    const course = await prisma.course.create({
-      data: {
-        title: "Introduction to Mechanical Design",
-        description:
-          "A starter course covering design fundamentals, CAD basics, and workshop safety for Mech Spec trainees.",
-        category: "Mechanical",
-        price: 29.99,
-        thumbnailUrl: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800",
-        learningObjectives: [
-          "Explain the mechanical design process",
-          "Identify basic CAD concepts",
-          "Apply workshop safety practices",
-        ],
-        isPublished: true,
-        instructorId: instructor.id,
-        lessons: {
-          create: [
-            {
-              title: "Welcome & Course Overview",
-              content:
-                "Welcome to Introduction to Mechanical Design. This lesson outlines the course goals, tools you will use, and how progress is tracked in the LMS.",
-              sortOrder: 1,
-            },
-            {
-              title: "Design Process Basics",
-              content:
-                "We walk through problem definition, requirements, concept generation, and evaluation. Keep notes—you will apply this process later.",
-              sortOrder: 2,
-            },
-            {
-              title: "Safety in the Workshop",
-              content:
-                "Personal protective equipment, machine zones, and reporting hazards. Safety is mandatory before any practical session.",
-              sortOrder: 3,
-            },
-          ],
-        },
-      },
-    });
-    console.log(`Sample course created id=${course.id} (published, 3 lessons)`);
-  } else {
-    console.log(`Sample course already exists id=${existingCourse.id}`);
-  }
-
-  // Sample transaction so Admin → Transactions has data after seed
-  const courseForTx = await prisma.course.findFirst({
-    where: { title: "Introduction to Mechanical Design" },
+  const course2 = await prisma.course.upsert({
+    where: { id: 2 },
+    update: {},
+    create: {
+      title: "Thermodynamics for Engineers",
+      description: "Core concepts of thermodynamics, heat transfer, and energy systems with practical examples.",
+      category: "Thermal Engineering",
+      price: 59.99,
+      isPublished: true,
+      instructorId: instructor.id,
+      thumbnailUrl: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=800",
+    },
   });
-  if (courseForTx) {
-    const existingTx = await prisma.transaction.findFirst({
-      where: { userId: student.id, courseId: courseForTx.id },
-    });
-    if (!existingTx) {
-      await prisma.transaction.create({
-        data: {
-          userId: student.id,
-          courseId: courseForTx.id,
-          amount: courseForTx.price,
-          status: "COMPLETED",
-        },
-      });
-      console.log("Sample transaction created for demo student");
-    }
-    const existingEnroll = await prisma.enrollment.findFirst({
-      where: { studentId: student.id, courseId: courseForTx.id },
-    });
-    if (!existingEnroll) {
-      await prisma.enrollment.create({
-        data: {
-          studentId: student.id,
-          courseId: courseForTx.id,
-          progressPercent: 0,
-          completedLessons: [],
-          status: "ACTIVE",
-        },
-      });
-      console.log("Sample enrollment created for demo student");
-    }
-  }
 
-  console.log("\n--- Demo accounts ---");
+  const course3 = await prisma.course.upsert({
+    where: { id: 3 },
+    update: {},
+    create: {
+      title: "Advanced Manufacturing Processes",
+      description: "CNC machining, additive manufacturing, quality control, and modern production techniques.",
+      category: "Manufacturing",
+      price: 69.99,
+      isPublished: true,
+      instructorId: instructor.id,
+      thumbnailUrl: "https://images.unsplash.com/photo-1565043589221-1a6fd9ae45c7?w=800",
+    },
+  });
+
+  console.log("Courses ready:", course1.title, course2.title, course3.title);
+  console.log("\n=== DEMO ACCOUNTS ===");
   console.log("ADMIN:      admin@mechspec.local / Admin@12345");
   console.log("INSTRUCTOR: instructor@mechspec.local / Instruct@12345");
-  console.log("STUDENT:    student@mechspec.local / Student@12345");
-  console.log("Change default passwords after first real deployment.");
-  void admin;
-  void student;
+  console.log("STUDENT:    student@mechspec.local / Student@2026Safe!");
+  console.log("=====================");
 }
 
 main()
@@ -156,4 +101,6 @@ main()
     console.error(e);
     process.exit(1);
   })
-  .finally(() => prisma.$disconnect());
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
