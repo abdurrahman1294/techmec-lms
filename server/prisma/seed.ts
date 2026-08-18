@@ -41,7 +41,7 @@ async function main() {
   const student = await upsertUser(
     "student@mechspec.local",
     "Alice Student",
-    "Student@2026Safe!",          //  strongr password
+    "Student@mechspec1234",          //  strongr password
     "STUDENT"
   );
 
