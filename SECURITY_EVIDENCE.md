@@ -37,3 +37,19 @@
 * **Evidence:**
   ![Successful Login Response](./screenshots/Screenshot-login-success.png)
   *Figure 5: Console output confirming successful credential verification and login.*
+
+---
+
+### 6. Frontend Application Interface
+* **Description:** The user interface provides an intuitive experience for students and instructors to navigate course offerings and interact with the Mech Spec LMS platform.
+* **Evidence:**
+  ![Frontend UI Interface](./screenshots/Screenshot-frontend-ui.png)
+  *Figure 6: Mech Spec LMS frontend running locally in the browser.*
+
+---
+
+### 7. Authenticated Request Header (JWT Verification)
+* **Description:** Upon successful login, the client securely attaches the JSON Web Token in the request headers (`Authorization: Bearer`) to gain access to protected backend routes.
+* **Evidence:**
+  ![Network Tab Token Header](./screenshots/Screenshot-network-token.png)
+  *Figure 7: Browser Developer Tools Network tab displaying the active Authorization Bearer token header.*
