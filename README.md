@@ -4,6 +4,7 @@ Role-based Learning Management System for Mech Spec Technologies[cite: 1].
 
 Live Demo: https://techmec-lms.vercel.app  
 GitHub Repository: https://github.com/abdurrahman1294/techmec-lms
+
 Demo Video: https://drive.google.com/file/d/1dk7mqNmeT8udMAsZ3UvdWOkxCY8PCn4z/view?usp=sharing 
 
 Stack: React + Vite + TypeScript · Express + Prisma · PostgreSQL · JWT · bcrypt
