@@ -51,5 +51,5 @@
 ### 7. Authenticated Request Header (JWT Verification)
 * **Description:** Upon successful login, the client securely attaches the JSON Web Token in the request headers (`Authorization: Bearer`) to gain access to protected backend routes.
 * **Evidence:**
-  ![Network Tab Token Header](./screenshots/Screenshot-network.png.png)
+  ![Network Tab Token Header](./screenshots/Screenshot-frontend-network.png.png)
   *Figure 7: Browser Developer Tools Network tab displaying the active Authorization Bearer token header.*
