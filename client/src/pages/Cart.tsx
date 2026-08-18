@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   getCart,
   removeFromCart,
@@ -28,7 +28,7 @@ export default function Cart() {
   const load = async () => {
     try {
       const data = await getCart();
-      setItems(data);
+      setItems(data || []);
     } catch (e: any) {
       toast.error(e.response?.data?.message || "Failed to load cart.");
     } finally {
@@ -56,7 +56,7 @@ export default function Cart() {
     try {
       await checkout();
       toast.success(
-        "Simulated payment successful! You are now enrolled."
+        "Payment simulated successfully! You are now enrolled."
       );
       navigate("/my-courses");
     } catch (e: any) {
@@ -66,64 +66,62 @@ export default function Cart() {
     }
   };
 
-  const total = items.reduce(
-    (s, i) => s + (i.Course?.price ?? 0),
-    0
-  );
+  const total = items.reduce((s, i) => s + (i.Course?.price ?? 0), 0);
 
-  if (loading) return <h2 style={{ padding: 20 }}>Loading cart...</h2>;
+  if (loading) return <h2>Loading cart...</h2>;
 
   return (
-    <div style={{ maxWidth: 800, margin: "30px auto", padding: 20 }}>
+    <div>
       <h1>Shopping Cart</h1>
-      <p style={{ color: "#666" }}>
+      <p style={{ color: "#64748b" }}>
         Simulated payment — no real card details are collected.
       </p>
 
       {items.length === 0 ? (
-        <p>Your cart is empty.</p>
+        <div className="course-card">
+          <p style={{ margin: 0, fontWeight: 600 }}>Your cart is empty</p>
+          <p style={{ margin: "8px 0 12px", color: "#64748b" }}>
+            Add a published course from the catalogue, then return here to
+            checkout.
+          </p>
+          <Link to="/courses">
+            <button type="button" className="btn btn-primary">
+              Browse courses
+            </button>
+          </Link>
+        </div>
       ) : (
         <>
           {items.map((item) => (
-            <div
-              key={item.id}
-              style={{
-                border: "1px solid #ddd",
-                borderRadius: 8,
-                padding: 16,
-                marginBottom: 12,
-              }}
-            >
+            <div key={item.id} className="course-card">
               <h3>{item.Course.title}</h3>
-              <p>{item.Course.description}</p>
+              <p className="course-description">{item.Course.description}</p>
               <p>
-                <strong>Instructor:</strong>{" "}
-                {item.Course.instructor?.name}
+                <strong>Instructor:</strong> {item.Course.instructor?.name}
               </p>
-              <p>
+              <p className="course-price">
                 <strong>Price:</strong> $
                 {Number(item.Course.price).toFixed(2)}
               </p>
-              <button onClick={() => handleRemove(item.Course.id)}>
-                Remove
-              </button>
+              <div className="course-actions">
+                <button
+                  type="button"
+                  className="delete-btn"
+                  onClick={() => handleRemove(item.Course.id)}
+                >
+                  Remove
+                </button>
+              </div>
             </div>
           ))}
 
-          <div style={{ marginTop: 20 }}>
-            <h2>Total: ${total.toFixed(2)}</h2>
+          <div className="course-card">
+            <h2 style={{ marginTop: 0 }}>Total: ${total.toFixed(2)}</h2>
             <button
+              type="button"
+              className="btn btn-success"
               onClick={handleCheckout}
               disabled={checkingOut}
-              style={{
-                padding: "12px 24px",
-                fontSize: 16,
-                background: "#2563eb",
-                color: "#fff",
-                border: "none",
-                borderRadius: 6,
-                cursor: "pointer",
-              }}
             >
               {checkingOut
                 ? "Processing..."

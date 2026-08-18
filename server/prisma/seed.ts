@@ -106,6 +106,42 @@ async function main() {
     console.log(`Sample course already exists id=${existingCourse.id}`);
   }
 
+  // Sample transaction so Admin → Transactions has data after seed
+  const courseForTx = await prisma.course.findFirst({
+    where: { title: "Introduction to Mechanical Design" },
+  });
+  if (courseForTx) {
+    const existingTx = await prisma.transaction.findFirst({
+      where: { userId: student.id, courseId: courseForTx.id },
+    });
+    if (!existingTx) {
+      await prisma.transaction.create({
+        data: {
+          userId: student.id,
+          courseId: courseForTx.id,
+          amount: courseForTx.price,
+          status: "COMPLETED",
+        },
+      });
+      console.log("Sample transaction created for demo student");
+    }
+    const existingEnroll = await prisma.enrollment.findFirst({
+      where: { studentId: student.id, courseId: courseForTx.id },
+    });
+    if (!existingEnroll) {
+      await prisma.enrollment.create({
+        data: {
+          studentId: student.id,
+          courseId: courseForTx.id,
+          progressPercent: 0,
+          completedLessons: [],
+          status: "ACTIVE",
+        },
+      });
+      console.log("Sample enrollment created for demo student");
+    }
+  }
+
   console.log("\n--- Demo accounts ---");
   console.log("ADMIN:      admin@mechspec.local / Admin@12345");
   console.log("INSTRUCTOR: instructor@mechspec.local / Instruct@12345");

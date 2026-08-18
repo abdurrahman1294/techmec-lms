@@ -19,7 +19,6 @@ export default function Profile() {
   }>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -48,10 +47,10 @@ export default function Profile() {
     setSaving(true);
     try {
       const updated = await updateProfile(name.trim());
-      toast.success("Profile updated.");
+      toast.success("Name updated.");
       if (token && user) {
         login(token, {
-          id: updated.id,
+          ...user,
           name: updated.name,
           email: updated.email,
           role: updated.role,
@@ -84,94 +83,84 @@ export default function Profile() {
     }
   };
 
-  if (loading) return <h2 style={{ padding: 20 }}>Loading profile...</h2>;
-
-  const field: React.CSSProperties = {
-    width: "100%",
-    padding: 10,
-    marginBottom: 14,
-    boxSizing: "border-box",
-  };
+  if (loading) return <h2>Loading profile...</h2>;
 
   return (
-    <div style={{ maxWidth: 560, margin: "30px auto", padding: 20 }}>
-      <h1>My Profile</h1>
-      <p style={{ color: "#64748b" }}>
-        Update your display name or change your password.
-      </p>
-
-      <form onSubmit={handleSave} style={{ marginTop: 20 }}>
-        <h3>Account</h3>
-        <label style={{ display: "block", marginBottom: 6 }}>Name</label>
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          style={field}
-        />
-        <label style={{ display: "block", marginBottom: 6 }}>Email</label>
-        <input value={email} disabled style={{ ...field, background: "#f1f5f9" }} />
-        <p>
-          <strong>Role:</strong> {role}
-        </p>
-        <p>
-          <strong>Status:</strong> {status}
-        </p>
-        {role === "INSTRUCTOR" && (
+    <div style={{ maxWidth: 520, margin: "0 auto" }}>
+      <h1>Profile</h1>
+      <div className="course-card">
+        <form onSubmit={handleSave}>
+          <label htmlFor="prof-name">Name</label>
+          <input
+            id="prof-name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <label htmlFor="prof-email">Email</label>
+          <input id="prof-email" value={email} disabled />
           <p>
-            <strong>Courses created:</strong> {counts.courses ?? 0}
+            <strong>Role:</strong> {role}
           </p>
-        )}
-        {role === "STUDENT" && (
           <p>
-            <strong>Enrollments:</strong> {counts.enrollments ?? 0}
+            <strong>Status:</strong> {status}
           </p>
-        )}
-        <button type="submit" disabled={saving}>
-          {saving ? "Saving..." : "Save name"}
-        </button>
-      </form>
+          {counts.courses !== undefined && (
+            <p>
+              <strong>Courses:</strong> {counts.courses}
+            </p>
+          )}
+          {counts.enrollments !== undefined && (
+            <p>
+              <strong>Enrollments:</strong> {counts.enrollments}
+            </p>
+          )}
+          <button type="submit" className="btn btn-primary" disabled={saving}>
+            {saving ? "Saving..." : "Save name"}
+          </button>
+        </form>
+      </div>
 
-      <hr style={{ margin: "32px 0" }} />
-
-      <form onSubmit={handleChangePassword}>
-        <h3>Change password</h3>
-        <label style={{ display: "block", marginBottom: 6 }}>
-          Current password
-        </label>
-        <input
-          type="password"
-          value={currentPassword}
-          onChange={(e) => setCurrentPassword(e.target.value)}
-          required
-          style={field}
-        />
-        <label style={{ display: "block", marginBottom: 6 }}>New password</label>
-        <input
-          type="password"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-          required
-          style={field}
-        />
-        <label style={{ display: "block", marginBottom: 6 }}>
-          Confirm new password
-        </label>
-        <input
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          required
-          style={field}
-        />
-        <p style={{ fontSize: 12, color: "#64748b" }}>
-          At least 8 characters, with upper, lower, number, and special
-          character.
-        </p>
-        <button type="submit" disabled={changingPw}>
-          {changingPw ? "Updating..." : "Change password"}
-        </button>
-      </form>
+      <div className="course-card">
+        <h2 style={{ marginTop: 0 }}>Change password</h2>
+        <form onSubmit={handleChangePassword}>
+          <label htmlFor="cur-pw">Current password</label>
+          <input
+            id="cur-pw"
+            type="password"
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
+            required
+          />
+          <label htmlFor="new-pw">New password</label>
+          <input
+            id="new-pw"
+            type="password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            required
+          />
+          <label htmlFor="conf-pw">Confirm new password</label>
+          <input
+            id="conf-pw"
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+          <p style={{ fontSize: 12, color: "#64748b" }}>
+            At least 8 characters, with upper, lower, number, and special
+            character.
+          </p>
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={changingPw}
+          >
+            {changingPw ? "Updating..." : "Change password"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

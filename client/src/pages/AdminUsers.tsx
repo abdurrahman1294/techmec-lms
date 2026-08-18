@@ -81,7 +81,7 @@ export default function AdminUsers() {
                 </span>
               </td>
               <td style={{ padding: 8 }}>
-                <button onClick={() => toggleStatus(u)}>
+                <button type="button" className="btn btn-secondary" onClick={() => toggleStatus(u)}>
                   {u.status === "ACTIVE" ? "Suspend" : "Activate"}
                 </button>
               </td>

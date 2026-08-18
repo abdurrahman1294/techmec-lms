@@ -1,26 +1,30 @@
 import "./Button.css";
 
 type ButtonProps = {
-  text: string;
+  text?: string;
+  children?: React.ReactNode;
   onClick?: () => void;
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
+  className?: string;
 };
 
 function Button({
   text,
+  children,
   onClick,
   type = "button",
   disabled = false,
+  className = "",
 }: ButtonProps) {
   return (
     <button
-      className="primary-button"
+      className={`primary-button ${className}`.trim()}
       type={type}
       onClick={onClick}
       disabled={disabled}
     >
-      {text}
+      {children ?? text}
     </button>
   );
 }

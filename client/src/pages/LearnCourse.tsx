@@ -72,22 +72,8 @@ export default function LearnCourse() {
         }}
       >
         <strong>Progress: {progress}%</strong>
-        <div
-          style={{
-            height: 10,
-            background: "#bae6fd",
-            borderRadius: 5,
-            marginTop: 8,
-          }}
-        >
-          <div
-            style={{
-              width: `${progress}%`,
-              height: "100%",
-              background: "#0284c7",
-              borderRadius: 5,
-            }}
-          />
+        <div className="progress-bar-outer">
+          <div className="progress-bar-inner" style={{ width: `${progress}%` }} />
         </div>
       </div>
 
@@ -98,8 +84,7 @@ export default function LearnCourse() {
           {lessons.map((l) => {
             const done = completed.includes(l.id);
             return (
-              <button
-                key={l.id}
+              <button type="button" className="btn btn-secondary" key={l.id}
                 onClick={() => setActiveLesson(l)}
                 style={{
                   display: "block",
@@ -136,17 +121,11 @@ export default function LearnCourse() {
               </div>
               {!completed.includes(activeLesson.id) && (
                 <button
+                  type="button"
+                  className="btn btn-success"
                   onClick={() => handleComplete(activeLesson.id)}
-                  style={{
-                    padding: "10px 18px",
-                    background: "#16a34a",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: 6,
-                    cursor: "pointer",
-                  }}
                 >
-                  Mark Complete
+                  Mark complete
                 </button>
               )}
               {completed.includes(activeLesson.id) && (

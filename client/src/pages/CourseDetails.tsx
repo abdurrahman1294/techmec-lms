@@ -158,9 +158,7 @@ export default function CourseDetails() {
       </ul>
 
       {user?.role === "STUDENT" && course.isPublished && (
-        <button onClick={handleAddToCart} style={{ marginRight: 8 }}>
-          Add to Cart
-        </button>
+        <button type="button" className="btn btn-success" onClick={handleAddToCart} style={{ marginRight: 8 }}>Add to Cart</button>
       )}
 
       {canManage && (
@@ -183,7 +181,7 @@ export default function CourseDetails() {
               required
               style={{ width: "100%", padding: 8, marginBottom: 8 }}
             />
-            <button type="submit">Add Lesson</button>
+            <button type="submit" className="btn btn-primary">Add Lesson</button>
           </form>
           <p style={{ marginTop: 12 }}>
             <Link to={`/courses/${course.id}/students`}>

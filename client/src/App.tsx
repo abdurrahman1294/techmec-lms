@@ -15,6 +15,7 @@ import CourseStudents from "./pages/CourseStudents";
 import InstructorCourses from "./pages/InstructorCourses";
 import Profile from "./pages/Profile";
 import AdminLogs from "./pages/AdminLogs";
+import AdminTransactions from "./pages/AdminTransactions";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/instructor/courses" element={<ProtectedRoute><InstructorCourses /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path="/admin/transactions" element={<ProtectedRoute><AdminTransactions /></ProtectedRoute>} />
         <Route path="/admin/logs" element={<ProtectedRoute><AdminLogs /></ProtectedRoute>} />
         <Route path="/admin/users" element={<ProtectedRoute><AdminUsers /></ProtectedRoute>} />
         <Route path="/courses/:id/students" element={<ProtectedRoute><CourseStudents /></ProtectedRoute>} />

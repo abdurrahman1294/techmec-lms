@@ -39,6 +39,7 @@ function Navbar() {
         {user?.role === "ADMIN" && (
           <>
             <NavLink to="/admin/users">Users</NavLink>
+            <NavLink to="/admin/transactions">Transactions</NavLink>
             <NavLink to="/admin/logs">Logs</NavLink>
           </>
         )}

@@ -4,7 +4,12 @@ import { toast } from "react-toastify";
 import api from "../services/api";
 import CourseForm from "../components/CourseForm";
 import type { CourseFormValues } from "../components/CourseForm";
-import { createCourse, updateCourse, deleteCourse } from "../services/courseService";
+import CourseCard from "../components/CourseCard";
+import {
+  createCourse,
+  updateCourse,
+  deleteCourse,
+} from "../services/courseService";
 
 interface Course {
   id: number;
@@ -84,75 +89,80 @@ export default function InstructorCourses() {
     }
   };
 
-  if (loading) return <h2 style={{ padding: 20 }}>Loading...</h2>;
+  if (loading) return <h2>Loading...</h2>;
 
   return (
-    <div style={{ maxWidth: 900, margin: "30px auto", padding: 20 }}>
-      <h1>My Instructor Courses</h1>
-      <p style={{ color: "#64748b" }}>
-        Create, publish, edit, and manage lessons for courses you teach.
-        Thumbnail is provided as a URL in this MVP (file upload is a future enhancement).
+    <div>
+      <h1>My Teaching</h1>
+      <p style={{ color: "#64748b", marginBottom: 16 }}>
+        Create and manage your courses. Publish them so students can purchase.
       </p>
 
-      <CourseForm
-        buttonText={editing ? "Update" : "Create"}
-        initial={
-          editing
-            ? {
-                title: editing.title,
-                description: editing.description,
-                category: editing.category ?? "General",
-                price: editing.price ?? 0,
-                thumbnailUrl: editing.thumbnailUrl ?? "",
-                learningObjectives: (editing.learningObjectives ?? []).join("\n"),
-                isPublished: editing.isPublished ?? false,
-              }
-            : null
-        }
-        onSubmit={editing ? handleUpdate : handleCreate}
-      />
-      {editing && (
-        <button onClick={() => setEditing(null)} style={{ marginBottom: 16 }}>
-          Cancel editing
-        </button>
+      {editing ? (
+        <div className="course-form-wrap">
+          <h2>Edit course</h2>
+          <CourseForm
+            buttonText="Save changes"
+            initial={{
+              title: editing.title,
+              description: editing.description,
+              category: editing.category || "",
+              price: editing.price ?? 0,
+              thumbnailUrl: editing.thumbnailUrl || "",
+              learningObjectives: (editing.learningObjectives || []).join("\n"),
+              isPublished: !!editing.isPublished,
+            }}
+            onSubmit={handleUpdate}
+          />
+          <button
+            type="button"
+            className="btn btn-secondary"
+            style={{ marginTop: 10 }}
+            onClick={() => setEditing(null)}
+          >
+            Cancel
+          </button>
+        </div>
+      ) : (
+        <div className="course-form-wrap">
+          <h2>Create course</h2>
+          <CourseForm buttonText="Create" onSubmit={handleCreate} />
+        </div>
       )}
 
-      <hr style={{ margin: "24px 0" }} />
+      <hr />
 
       {courses.length === 0 ? (
-        <p>You have not created any courses yet.</p>
+        <div className="course-card">
+          <p style={{ margin: 0, fontWeight: 600 }}>No courses yet</p>
+          <p style={{ margin: "8px 0 0", color: "#64748b" }}>
+            Use the form above to create your first course.
+          </p>
+        </div>
       ) : (
         courses.map((c) => (
-          <div
-            key={c.id}
-            style={{
-              border: "1px solid #e2e8f0",
-              borderRadius: 8,
-              padding: 16,
-              marginBottom: 12,
-            }}
-          >
-            <h3>
-              <Link to={`/courses/${c.id}`}>{c.title}</Link>
-            </h3>
-            <p>{c.description}</p>
-            <p>
-              <strong>Status:</strong>{" "}
-              {c.isPublished ? "Published" : "Draft"} ·{" "}
-              <strong>Price:</strong> ${Number(c.price ?? 0).toFixed(2)} ·{" "}
-              <strong>Lessons:</strong> {c._count?.lessons ?? 0} ·{" "}
-              <strong>Enrollments:</strong> {c._count?.enrollments ?? 0}
+          <div key={c.id}>
+            <CourseCard
+              id={c.id}
+              title={c.title}
+              description={c.description}
+              instructor={c.instructor?.name || "You"}
+              price={c.price}
+              category={c.category}
+              isPublished={c.isPublished}
+              canEdit
+              canDelete
+              onEdit={() => setEditing(c)}
+              onDelete={handleDelete}
+            />
+            <p style={{ marginTop: -8, marginBottom: 16, fontSize: 13, color: "#64748b" }}>
+              Lessons: {c._count?.lessons ?? 0} · Enrollments:{" "}
+              {c._count?.enrollments ?? 0}
+              {" · "}
+              <Link to={`/courses/${c.id}`}>Open / Lessons</Link>
+              {" · "}
+              <Link to={`/courses/${c.id}/students`}>Enrolled students</Link>
             </p>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              <button onClick={() => setEditing(c)}>Edit</button>
-              <button onClick={() => handleDelete(c.id)}>Delete</button>
-              <Link to={`/courses/${c.id}`}>
-                <button>Open / Lessons</button>
-              </Link>
-              <Link to={`/courses/${c.id}/students`}>
-                <button>Enrolled students</button>
-              </Link>
-            </div>
           </div>
         ))
       )}

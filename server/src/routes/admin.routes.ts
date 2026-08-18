@@ -6,6 +6,7 @@ import {
   updateUserStatus,
   getAdminStats,
   getSystemLogs,
+  listTransactions,
 } from "../controllers/admin.controller";
 
 const router = Router();
@@ -50,4 +51,12 @@ router.get(
   getSystemLogs
 );
 
+router.get(
+  "/admin/transactions",
+  authenticate,
+  authorize("ADMIN"),
+  listTransactions
+);
+
 export default router;
+

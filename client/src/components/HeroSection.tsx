@@ -8,54 +8,40 @@ function HeroSection() {
     <section
       style={{
         textAlign: "center",
-        padding: "80px 20px",
-        background:
-          "linear-gradient(135deg, #1e293b, #2563eb)",
-        color: "white",
+        padding: "56px 24px",
+        background: "#1e3a8a",
+        color: "#ffffff",
+        marginBottom: 28,
+        borderRadius: 10,
       }}
     >
       <h1
         style={{
-          fontSize: "48px",
-          marginBottom: "20px",
+          fontSize: 34,
+          marginBottom: 14,
+          fontWeight: 700,
+          color: "#ffffff",
         }}
       >
         Learn. Teach. Grow.
       </h1>
-
       <p
         style={{
-          fontSize: "20px",
-          maxWidth: "700px",
-          margin: "0 auto 40px auto",
-          lineHeight: "1.7",
+          fontSize: 16,
+          maxWidth: 520,
+          margin: "0 auto 28px",
+          lineHeight: 1.65,
+          color: "#e2e8f0",
         }}
       >
-        Mech Spec LMS is a modern Learning Management
-        System that empowers instructors to create
-        courses and enables students to learn,
-        enroll, and track their educational journey
-        securely.
+        Mech Spec LMS helps instructors publish courses and students enrol,
+        learn, and track progress.
       </p>
-
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          gap: "20px",
-          flexWrap: "wrap",
-        }}
-      >
-        <Button
-          text="Browse Courses"
-          onClick={() => navigate("/courses")}
-        />
-
-        <Button
-          text="Get Started"
-          onClick={() => navigate("/register")}
-        />
-      </div>
+      <Button
+        className="btn-on-dark"
+        onClick={() => navigate("/courses")}
+        text="Browse courses"
+      />
     </section>
   );
 }

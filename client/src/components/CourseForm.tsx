@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { uploadThumbnail } from "../services/uploadService";
+import "./CourseForm.css";
 
 export interface CourseFormValues {
   title: string;
@@ -13,13 +14,14 @@ export interface CourseFormValues {
 }
 
 type CourseFormProps = {
-  buttonText: string;
+  /** Label for the submit button. Defaults to "Create". */
+  buttonText?: string;
   onSubmit: (values: CourseFormValues) => void;
   initial?: Partial<CourseFormValues> | null;
 };
 
 export default function CourseForm({
-  buttonText,
+  buttonText = "Create",
   onSubmit,
   initial = null,
 }: CourseFormProps) {
@@ -31,6 +33,8 @@ export default function CourseForm({
   const [learningObjectives, setLearningObjectives] = useState("");
   const [isPublished, setIsPublished] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [fileName, setFileName] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!initial) return;
@@ -41,6 +45,7 @@ export default function CourseForm({
     setThumbnailUrl(initial.thumbnailUrl ?? "");
     setLearningObjectives(initial.learningObjectives ?? "");
     setIsPublished(initial.isPublished ?? false);
+    setFileName("");
   }, [
     initial?.title,
     initial?.description,
@@ -64,15 +69,15 @@ export default function CourseForm({
       return;
     }
 
+    setFileName(file.name);
     setUploading(true);
     try {
       const url = await uploadThumbnail(file);
       setThumbnailUrl(url);
       toast.success("Thumbnail uploaded.");
     } catch (err: any) {
-      toast.error(
-        err.response?.data?.message || "Thumbnail upload failed."
-      );
+      toast.error(err.response?.data?.message || "Thumbnail upload failed.");
+      setFileName("");
     } finally {
       setUploading(false);
       e.target.value = "";
@@ -111,98 +116,127 @@ export default function CourseForm({
       setThumbnailUrl("");
       setLearningObjectives("");
       setIsPublished(false);
+      setFileName("");
     }
   };
 
-  const fieldStyle: React.CSSProperties = {
-    width: "100%",
-    padding: "10px",
-    marginBottom: "12px",
-    boxSizing: "border-box",
-  };
-
   return (
-    <div style={{ marginBottom: "30px" }}>
-      <h2>{buttonText} Course</h2>
-      <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="course-form">
+      <div className="form-field">
+        <label htmlFor="course-title">Course title</label>
         <input
+          id="course-title"
           type="text"
-          placeholder="Course Title"
+          placeholder="e.g. Database Management with SQL"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
-          style={fieldStyle}
         />
+      </div>
+
+      <div className="form-field">
+        <label htmlFor="course-description">Course description</label>
         <textarea
-          placeholder="Course Description"
+          id="course-description"
+          placeholder="What will students learn?"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={4}
           required
-          style={fieldStyle}
         />
-        <input
-          type="text"
-          placeholder="Category (e.g. Mechanical, CAD)"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          style={fieldStyle}
-        />
-        <input
-          type="number"
-          min="0"
-          step="0.01"
-          placeholder="Price"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-          style={fieldStyle}
-        />
+      </div>
 
-        <label style={{ display: "block", marginBottom: 6, fontWeight: 600 }}>
-          Course thumbnail
-        </label>
-        <input
-          type="file"
-          accept="image/jpeg,image/png,image/webp,image/gif"
-          onChange={handleFileChange}
-          disabled={uploading}
-          style={{ marginBottom: 8 }}
-        />
+      <div className="form-row">
+        <div className="form-field">
+          <label htmlFor="course-category">Category</label>
+          <input
+            id="course-category"
+            type="text"
+            placeholder="e.g. Mechanical, CAD, Software"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          />
+        </div>
+        <div className="form-field">
+          <label htmlFor="course-price">Price (₦ / $)</label>
+          <input
+            id="course-price"
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="0"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="form-field">
+        <label>Course thumbnail</label>
+        <div className="file-upload-row">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            onChange={handleFileChange}
+            disabled={uploading}
+            className="file-input-hidden"
+            id="course-thumbnail-file"
+          />
+          <button
+            type="button"
+            className="btn btn-secondary file-pick-btn"
+            disabled={uploading}
+            onClick={() => fileInputRef.current?.click()}
+          >
+            {uploading ? "Uploading…" : "Choose image"}
+          </button>
+          <span className="file-name">
+            {fileName || (thumbnailUrl ? "Image selected" : "No file chosen")}
+          </span>
+        </div>
         {uploading && (
-          <p style={{ color: "#64748b", marginBottom: 8 }}>Uploading...</p>
+          <p className="field-hint">Uploading thumbnail…</p>
         )}
         <input
           type="url"
           placeholder="Or paste a thumbnail URL"
           value={thumbnailUrl}
           onChange={(e) => setThumbnailUrl(e.target.value)}
-          style={fieldStyle}
+          className="mt-8"
         />
         {thumbnailUrl && (
-          <p style={{ fontSize: 12, color: "#64748b", marginTop: -8 }}>
-            Current: {thumbnailUrl}
-          </p>
+          <p className="field-hint truncate">Current: {thumbnailUrl}</p>
         )}
+      </div>
 
+      <div className="form-field">
+        <label htmlFor="course-objectives">Learning objectives (one per line)</label>
         <textarea
-          placeholder="Learning objectives (one per line)"
+          id="course-objectives"
+          placeholder={"Understand SQL joins\nWrite efficient queries\nDesign normalized schemas"}
           value={learningObjectives}
           onChange={(e) => setLearningObjectives(e.target.value)}
           rows={3}
-          style={fieldStyle}
         />
-        <label style={{ display: "block", marginBottom: "12px" }}>
-          <input
-            type="checkbox"
-            checked={isPublished}
-            onChange={(e) => setIsPublished(e.target.checked)}
-          />{" "}
-          Published (visible to students / purchasable)
-        </label>
-        <button type="submit" disabled={uploading}>
-          {buttonText}
-        </button>
-      </form>
-    </div>
+      </div>
+
+      <label className="publish-label">
+        <input
+          type="checkbox"
+          checked={isPublished}
+          onChange={(e) => setIsPublished(e.target.checked)}
+        />
+        <span>Published (visible to students / purchasable)</span>
+      </label>
+
+      <button
+        type="submit"
+        className="btn btn-primary submit-btn"
+        disabled={uploading}
+      >
+        {buttonText}
+      </button>
+    </form>
   );
 }

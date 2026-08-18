@@ -1,0 +1,13 @@
+IMPORTANT: Replace the WHOLE client folder. Do not merge randomly.
+
+1. Stop npm run dev
+2. Rename old client -> client-OLD
+3. Put this client folder next to server
+4. cd client
+5. npm install
+6. npm run dev
+7. Browser: Ctrl+F5
+
+Also copy server fix:
+  server/src/controllers/admin.controller.ts
+Then restart the SERVER (npm run dev in server folder).

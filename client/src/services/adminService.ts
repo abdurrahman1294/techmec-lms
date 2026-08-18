@@ -24,3 +24,8 @@ export const getSystemLogs = async () => {
   const response = await api.get("/admin/logs");
   return response.data.data;
 };
+
+export const getTransactions = async () => {
+  const response = await api.get("/admin/transactions");
+  return response.data.data;
+};

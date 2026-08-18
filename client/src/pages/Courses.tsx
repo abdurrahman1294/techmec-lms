@@ -172,7 +172,7 @@ export default function Courses() {
             onSubmit={editingCourse ? handleUpdate : handleCreate}
           />
           {editingCourse && (
-            <button onClick={() => setEditingCourse(null)}>
+            <button type="button" className="btn btn-secondary" onClick={() => setEditingCourse(null)}>
               Cancel Editing
             </button>
           )}
@@ -180,25 +180,16 @@ export default function Courses() {
         </>
       )}
 
-      <div
-        style={{
-          display: "flex",
-          gap: 12,
-          flexWrap: "wrap",
-          marginBottom: 20,
-        }}
-      >
+      <div className="search-bar">
         <input
           type="search"
           placeholder="Search by title, description, or instructor..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          style={{ flex: 1, minWidth: 200, padding: 10 }}
         />
         <select
           value={categoryFilter}
           onChange={(e) => setCategoryFilter(e.target.value)}
-          style={{ padding: 10 }}
         >
           <option value="ALL">All categories</option>
           {categories.map((cat) => (

@@ -9,11 +9,6 @@ interface AuthRequest extends Request {
   file?: Express.Multer.File;
 }
 
-/**
- * POST /api/upload/thumbnail
- * Accepts multipart field "thumbnail" (image).
- * Saves under /uploads and returns a public URL path.
- */
 export const uploadThumbnail = async (
   req: AuthRequest,
   res: Response

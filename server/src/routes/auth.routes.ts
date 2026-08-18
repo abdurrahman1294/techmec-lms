@@ -12,12 +12,6 @@ interface AuthRequest extends Request {
 router.post("/register", register);
 router.post("/login", login);
 
-/**
- * Logout: records USER_LOGOUT in SystemLog and relies on the client
- * discarding the JWT. JWTs are stateless — this endpoint does NOT
- * revoke tokens server-side. Token expiry (1d) limits residual risk.
- * Refresh-token / denylist is a future enhancement.
- */
 router.post(
   "/logout",
   authenticate,

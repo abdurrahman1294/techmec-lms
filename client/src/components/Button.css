@@ -1,24 +1,31 @@
 .primary-button {
   background: #2563eb;
-  color: white;
+  color: #ffffff;
   border: none;
   padding: 12px 22px;
   border-radius: 8px;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.2s;
+  font-family: inherit;
 }
 
 .primary-button:hover {
   background: #1d4ed8;
 }
 
-.primary-button:active {
-  transform: scale(0.98);
-}
-
 .primary-button:disabled {
   background: #94a3b8;
   cursor: not-allowed;
+}
+
+/* On dark hero: white button so it is readable */
+.primary-button.btn-on-dark {
+  background: #ffffff;
+  color: #1e3a8a;
+}
+
+.primary-button.btn-on-dark:hover {
+  background: #e2e8f0;
+  color: #1e3a8a;
 }

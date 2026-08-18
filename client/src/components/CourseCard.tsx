@@ -41,12 +41,14 @@ export default function CourseCard({
   learnLink,
 }: CourseCardProps) {
   return (
-    <div className="course-card" style={{ marginBottom: 16 }}>
-      <h3>
-        <Link to={`/courses/${id}`}>{title}</Link>
-      </h3>
-      <p>{description}</p>
-      <p>
+    <div className="course-card">
+      <div className="course-header">
+        <h3>
+          <Link to={`/courses/${id}`}>{title}</Link>
+        </h3>
+      </div>
+      <p className="course-description">{description}</p>
+      <p className="course-instructor">
         <strong>Instructor:</strong> {instructor}
       </p>
       {category && (
@@ -55,37 +57,66 @@ export default function CourseCard({
         </p>
       )}
       {price !== undefined && (
-        <p>
+        <p className="course-price">
           <strong>Price:</strong> ${Number(price).toFixed(2)}
         </p>
       )}
       {isPublished !== undefined && (
         <p>
-          <strong>Status:</strong>{" "}
-          {isPublished ? "Published" : "Draft"}
+          <strong>Status:</strong> {isPublished ? "Published" : "Draft"}
         </p>
       )}
       {progressPercent !== undefined && (
-        <p>
-          <strong>Progress:</strong> {progressPercent}%
-        </p>
+        <>
+          <p>
+            <strong>Progress:</strong> {progressPercent}%
+          </p>
+          <div className="progress-bar-outer">
+            <div
+              className="progress-bar-inner"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+        </>
       )}
-      <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+      <div className="course-actions">
         {canEdit && onEdit && (
-          <button onClick={onEdit}>Edit</button>
+          <button type="button" className="edit-btn" onClick={onEdit}>
+            Edit
+          </button>
         )}
         {canDelete && onDelete && (
-          <button onClick={() => onDelete(id)}>Delete</button>
+          <button
+            type="button"
+            className="delete-btn"
+            onClick={() => onDelete(id)}
+          >
+            Delete
+          </button>
         )}
         {canAddToCart && onAddToCart && (
-          <button onClick={() => onAddToCart(id)}>Add to Cart</button>
+          <button
+            type="button"
+            className="enroll-btn"
+            onClick={() => onAddToCart(id)}
+          >
+            Add to Cart
+          </button>
         )}
         {canEnroll && onEnroll && (
-          <button onClick={() => onEnroll(id)}>Enroll</button>
+          <button
+            type="button"
+            className="enroll-btn"
+            onClick={() => onEnroll(id)}
+          >
+            Enroll
+          </button>
         )}
         {learnLink && (
           <Link to={`/learn/${id}`}>
-            <button>Continue Learning</button>
+            <button type="button" className="view-btn">
+              Continue Learning
+            </button>
           </Link>
         )}
       </div>

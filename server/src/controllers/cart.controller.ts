@@ -224,29 +224,27 @@ export const checkout = async (
           },
         });
 
-      if (existingEnrollment) {
-        await prisma.cartItem.delete({ where: { id: item.id } });
-        continue;
-      }
-
       const transaction = await prisma.transaction.create({
         data: {
           userId: req.user.id,
           courseId: course.id,
-          amount: course.price,
+          amount: course.price ?? 0,
           status: "COMPLETED",
         },
       });
 
-      const enrollment = await prisma.enrollment.create({
-        data: {
-          studentId: req.user.id,
-          courseId: course.id,
-          progressPercent: 0,
-          completedLessons: [],
-          status: "ACTIVE",
-        },
-      });
+      let enrollment = existingEnrollment;
+      if (!enrollment) {
+        enrollment = await prisma.enrollment.create({
+          data: {
+            studentId: req.user.id,
+            courseId: course.id,
+            progressPercent: 0,
+            completedLessons: [],
+            status: "ACTIVE",
+          },
+        });
+      }
 
       await prisma.cartItem.delete({ where: { id: item.id } });
 
