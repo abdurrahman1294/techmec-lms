@@ -8,7 +8,9 @@
     "seed": "npx ts-node prisma/seed.ts",
     "prisma:generate": "npx prisma@6.19.3 generate",
     "prisma:migrate": "npx prisma@6.19.3 migrate deploy",
-    "postinstall": "npx prisma@6.19.3 generate"
+    "postinstall": "npx prisma@6.19.3 generate",
+    "start": "node -r ts-node/register/transpile-only src/index.ts",
+    "build": "echo \"No build step; uses ts-node\""
   },
   "dependencies": {
     "@prisma/client": "6.19.3",
@@ -21,7 +23,10 @@
     "multer": "^2.0.2",
     "openai": "^7.4.0",
     "winston": "^3.19.0",
-    "zod": "^4.0.17"
+    "zod": "^4.0.17",
+    "prisma": "6.19.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
@@ -32,10 +37,7 @@
     "@types/multer": "^2.0.0",
     "@types/node": "^24.1.0",
     "@types/winston": "^2.4.4",
-    "prisma": "6.19.3",
-    "ts-node": "^10.9.2",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.9.2"
+    "ts-node-dev": "^2.0.0"
   },
   "prisma": {
     "seed": "npx ts-node prisma/seed.ts"
